@@ -1,3 +1,31 @@
+# Initialize a list to store the minimum distances for each bank
+min_distances = []
+
+# Calculate the minimum distance for each bank to any Wdr site
+for _, bank in tqdm(bank_locations.iterrows(), total=bank_locations.shape[0], desc='Calculating distances'):
+    # Calculate distances from this bank to all Wdr sites
+    distances = wdr_locations.apply(
+        lambda wdr_site: haversine(
+            bank['Latitude'], bank['Longitude'],
+            wdr_site['Impact LocationLatitude'], wdr_site['Impact LocationLongitude']
+        ), axis=1
+    )
+    # Find the minimum distance
+    min_distances.append(distances.min())
+
+# Add the minimum distance to the bank_locations dataframe
+bank_locations['Min_Distance_to_Wdr'] = min_distances
+
+# Save the result to a CSV file
+bank_locations.to_csv('bank_min_distances_to_wdr.csv', index=False)
+
+print("Spreadsheet 'bank_min_distances_to_wdr.csv' with minimum distances has been created.")
+
+# Display the first few rows of the result
+print("\
+First few rows of the spreadsheet:")
+print(bank_locations.head())
+
 # Initialize a list to store the minimum distances for each ILF bank
 min_distances = []
 
