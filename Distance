@@ -1,0 +1,56 @@
+# Initialize a list to store the minimum distances for each ILF bank
+min_distances = []
+
+# Calculate the minimum distance for each ILF bank to any Wdr site
+for _, bank in tqdm(ilf_banks.iterrows(), total=ilf_banks.shape[0], desc='Calculating distances'):
+    # Calculate distances from this bank to all Wdr sites
+    distances = wdr_locations.apply(
+        lambda wdr_site: haversine(
+            bank['Latitude'], bank['Longitude'],
+            wdr_site['Impact LocationLatitude'], wdr_site['Impact LocationLongitude']
+        ), axis=1
+    )
+    # Find the minimum distance
+    min_distances.append(distances.min())
+
+# Add the minimum distance to the ilf_banks dataframe
+ilf_banks['Min_Distance_to_Wdr'] = min_distances
+
+# Save the result to a CSV file
+ilf_banks.to_csv('ilf_bank_min_distances_to_wdr.csv', index=False)
+
+print("Spreadsheet 'ilf_bank_min_distances_to_wdr.csv' with minimum distances has been created.")
+
+# Display the first few rows of the result
+print("\
+First few rows of the spreadsheet:")
+print(ilf_banks.head())
+
+# Calculate some statistics
+print("\
+Statistics of minimum distances (in km):")
+print(ilf_banks['Min_Distance_to_Wdr'].describe())
+
+# Plot a histogram of the minimum distances
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(10, 6))
+plt.hist(ilf_banks['Min_Distance_to_Wdr'], bins=30, edgecolor='black')
+plt.title('Distribution of Minimum Distances from ILF Banks to Wdr Sites')
+plt.xlabel('Distance (km)')
+plt.ylabel('Frequency')
+plt.show()
+
+# Find the ILF bank with the largest minimum distance to a Wdr site
+max_distance_bank = ilf_banks.loc[ilf_banks['Min_Distance_to_Wdr'].idxmax()]
+print(f"\
+ILF bank furthest from any Wdr site:")
+print(f"Name: {max_distance_bank['Name']}")
+print(f"Distance: {max_distance_bank['Min_Distance_to_Wdr']:.2f} km")
+
+# Find the ILF bank with the smallest minimum distance to a Wdr site
+min_distance_bank = ilf_banks.loc[ilf_banks['Min_Distance_to_Wdr'].idxmin()]
+print(f"\
+ILF bank closest to a Wdr site:")
+print(f"Name: {min_distance_bank['Name']}")
+print(f"Distance: {min_distance_bank['Min_Distance_to_Wdr']:.2f} km")
