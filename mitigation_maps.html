@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mitigation Bank Maps</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+        }
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        .nav {
+            background: #34495e;
+            padding: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+        .nav button {
+            background: #3498db;
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        .nav button:hover {
+            background: #2980b9;
+        }
+        .map-container {
+            margin: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        #map-frame {
+            width: 100%;
+            height: 800px;
+            border: none;
+            border-radius: 4px;
+        }
+        .active {
+            background: #2980b9 !important;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Mitigation Bank Maps by District</h1>
+    </div>
+    <div class="nav" id="district-nav">
+        <button onclick="loadMap('Portland')" class="active">Portland</button>
+        <button onclick="loadMap('San_Francisco')">San Francisco</button>
+        <button onclick="loadMap('Sacramento')">Sacramento</button>
+        <button onclick="loadMap('Jacksonville')">Jacksonville</button>
+        <button onclick="loadMap('Albuquerque')">Albuquerque</button>
+        <button onclick="loadMap('Chicago')">Chicago</button>
+        <button onclick="loadMap('New_Orleans')">New Orleans</button>
+        <button onclick="loadMap('Seattle')">Seattle</button>
+        <button onclick="loadMap('Kansas_City')">Kansas City</button>
+        <button onclick="loadMap('St._Paul')">St. Paul</button>
+        <button onclick="loadMap('Omaha')">Omaha</button>
+        <button onclick="loadMap('Buffalo')">Buffalo</button>
+        <button onclick="loadMap('Savannah')">Savannah</button>
+        <button onclick="loadMap('Norfolk')">Norfolk</button>
+        <button onclick="loadMap('Los_Angeles')">Los Angeles</button>
+        <button onclick="loadMap('Charleston')">Charleston</button>
+        <button onclick="loadMap('Vicksburg')">Vicksburg</button>
+        <button onclick="loadMap('Galveston')">Galveston</button>
+        <button onclick="loadMap('Fort_Worth')">Fort Worth</button>
+        <button onclick="loadMap('Mobile')">Mobile</button>
+        <button onclick="loadMap('Nashville')">Nashville</button>
+        <button onclick="loadMap('Walla_Walla')">Walla Walla</button>
+        <button onclick="loadMap('Little_Rock')">Little Rock</button>
+        <button onclick="loadMap('Pittsburgh')">Pittsburgh</button>
+        <button onclick="loadMap('Huntington')">Huntington</button>
+        <button onclick="loadMap('Louisville')">Louisville</button>
+        <button onclick="loadMap('Alaska')">Alaska</button>
+        <button onclick="loadMap('Memphis')">Memphis</button>
+        <button onclick="loadMap('Wilmington')">Wilmington</button>
+        <button onclick="loadMap('St._Louis')">St. Louis</button>
+        <button onclick="loadMap('Rock_Island')">Rock Island</button>
+        <button onclick="loadMap('Baltimore')">Baltimore</button>
+        <button onclick="loadMap('New_York')">New York</button>
+        <button onclick="loadMap('New_England')">New England</button>
+        <button onclick="loadMap('Tulsa')">Tulsa</button>
+        <button onclick="loadMap('Philadelphia')">Philadelphia</button>
+        <button onclick="loadMap('Detroit')">Detroit</button>
+        <button onclick="loadMap('Honolulu')">Honolulu</button>
+    </div>
+    <div class="map-container">
+        <iframe id="map-frame" src="map_Portland.html"></iframe>
+    </div>
+
+    <script>
+        function loadMap(district) {
+            // Update iframe source
+            document.getElementById('map-frame').src = `map_${district}.html`;
+            
+            // Update active button
+            const buttons = document.querySelectorAll('.nav button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+                if (button.innerText.replace(' ', '_') === district) {
+                    button.classList.add('active');
+                }
+            });
+        }
+
+        // Add smooth scrolling for mobile
+        document.querySelectorAll('.nav button').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelector('.map-container').scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
